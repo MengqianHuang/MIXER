@@ -3,11 +3,17 @@
   class="dark-light" align="right" width="70" alt="image"
 />
 
-# LEGEND: Identifying Co-expressed Genes in Multimodal Transcriptomic Sequencing Data
+# MIXER: Identifying Co-expressed Genes in Multimodal Transcriptomic Sequencing Data
 
-We present a novel method called mu**L**timodal co-**E**xpressed **GEN**es fin**D**er (LEGEND) that performs integrated gene clustering on scRNA-seq and SRT data to identify co-expressed genes at both the cell type and tissue domain levels. LEGEND performs a hierarchical gene clustering with the aim of maximizing intra-cluster redundancy and inter-cluster complementarity.
+> [!NOTE]  
+> The **MIXER** repository contains all the functions of [LEGEND](https://github.com/ToryDeng/LEGEND), but is renamed to better reflect the multimodal integration of scRNA-seq and SRT data. Currently, only the MIXER repository is active and will be maintained in the future. 
+
+We present a novel method called **M**ult**I**modal co-e**X**pressed g**E**nes finde**R** (MIXER) 
+that performs integrated gene clustering on scRNA-seq and SRT data to identify co-expressed genes at both the cell type and tissue domain levels. MIXER performs a hierarchical gene clustering with the aim of maximizing intra-cluster redundancy and inter-cluster complementarity.
 
 ![image](docs/assets/img/workflow.png)
+
+
 
 
 ## Dependencies
@@ -31,26 +37,26 @@ We present a novel method called mu**L**timodal co-**E**xpressed **GEN**es fin**
 You can download the package from GitHub and install it locally:
 
 ```shell
-git clone https://github.com/ToryDeng/LEGEND.git
-cd LEGEND/
-pip install dist/LEGEND-0.1.1-py3-none-any.whl
+git clone https://github.com/MengqianHuang/MIXER.git
+cd MIXER/
+pip install dist/MIXER-0.1.1-py3-none-any.whl
 ```
 
 ## Getting started
 
-If `adata_rna` is the sc/snRNA-seq dataset and `adata_st` is the ST dataset (the histology image is optional), you can run LEGEND as follows:
+If `adata_rna` is the sc/snRNA-seq dataset and `adata_st` is the ST dataset (the histology image is optional), you can run MIXER as follows:
 ```python
-import LEGEND as lg
+import MIXER as mi
 
-info_rna, _ = lg.GeneClust(adata_rna, return_info=True)
+info_rna, _ = mi.GeneClust(adata_rna, return_info=True)
 # if the histology image is available
-info_st, _ = lg.GeneClust(adata_st, image=img, return_info=True)
+info_st, _ = mi.GeneClust(adata_st, image=img, return_info=True)
 # if the histology image is not available
-info_st, _ = lg.GeneClust(adata_st, return_info=True)
+info_st, _ = mi.GeneClust(adata_st, return_info=True)
 
-integration_info, integrated_genes = lg.integrate(info_rna, info_st, return_info=True)
+integration_info, integrated_genes = mi.integrate(info_rna, info_st, return_info=True)
 ```
-For more details about how to call the functions, please refer to the [**Tutorial**](https://torydeng.github.io/LEGEND/).
+For more details about how to call the functions, please refer to the [**Tutorial**](https://mengqianhuang.github.io/MIXER/).
 
 ## Tested environment
 

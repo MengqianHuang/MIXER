@@ -3,9 +3,9 @@ layout: default
 toc: true
 ---
 
-# LEGEND Tutorial
+# MIXER Tutorial
 
-**Authors:** [Tao Deng](https://torydeng.github.io/)<sup>§</sup>, Kaichen Xu, Yucheng Xu, Yuwei Hu, Zhihua Liu, Siyu chen, [Hao Wu](https://www.haowulab.org/)<sup>\*</sup>, and [Xiaobo Sun](https://scholar.google.com/citations?user=l56IWfgAAAAJ&hl=en)<sup>§\*</sup>
+**Authors:** [Tao Deng](https://torydeng.github.io/)<sup>§</sup>, Mengqian Huang, Kaichen Xu, Yan Lu, Yucheng Xu, Siyu chen, Nina Xie, [Hao Wu](https://www.haowulab.org/)<sup>\*</sup>, and [Xiaobo Sun](https://scholar.google.com/citations?user=l56IWfgAAAAJ&hl=en)<sup>§\*</sup>
 
 <sup>§</sup> Equal contribution. <sup>\*</sup> Corresponding authors.
 
@@ -17,72 +17,72 @@ toc: true
 
 ## Introduction
 
-Exploring co-expressed genes is essential for revealing biologically co-functional genes. However, existing methods for this purpose rely solely on sc/snRNA-seq or spatially-resolved transcriptomic (SRT) data, leading to weaker co-functionality among identified genes. We present `LEGEND` (mu**L**timodal co-**E**xpressed **GEN**es fin**D**er), a novel method that performs integrated gene clustering on sc/snRNA-seq and SRT data for identifying genes co-expressed at both the cell type and tissue domain levels.
+Exploring co-expressed genes is essential for revealing biologically co-functional genes. However, existing methods for this purpose rely solely on sc/snRNA-seq or spatially-resolved transcriptomic (SRT) data, leading to weaker co-functionality among identified genes. We present `MIXER` (**M**ult**I**modal co-e**X**pressed g**E**nes finde**R**), a novel method that performs integrated gene clustering on sc/snRNA-seq and SRT data for identifying genes co-expressed at both the cell type and tissue domain levels.
 
 
 <img src="assets/img/workflow.png" width="100%">
 
 
-The above figure illustrates the workflow of `LEGEND`. Under the framework of information theory, `LEGEND` estimates gene relevance, redundancy and complementarity in both SRT and sc/snRNA-seq datasets in a pseudo-semi-supervised manner. This information is used to construct a gene-gene redundancy graph, on which hierarchical gene clustering is performed using relative redundancy index (RRI) between neighboring gene nodes. The resulting clusters contain genes that are co-expressed at both tissue domain and cell type levels, suggesting a higher likelihood of biological co-functionality.
+The above figure illustrates the workflow of `MIXER`. Under the framework of information theory, `MIXER` estimates gene relevance, redundancy and complementarity in both SRT and sc/snRNA-seq datasets in a pseudo-semi-supervised manner. This information is used to construct a gene-gene redundancy graph, on which hierarchical gene clustering is performed using relative redundancy index (RRI) between neighboring gene nodes. The resulting clusters contain genes that are co-expressed at both tissue domain and cell type levels, suggesting a higher likelihood of biological co-functionality.
 
 ## Installation
 
 ### Install Python and graph-tool
 
-We recommend you installing Python and the dependencies of `LEGEND` using [Conda](https://docs.conda.io/en/latest/), as one of the dependencies, [graph-tool](https://graph-tool.skewed.de/static/doc/index.html), is only available through this platform:
+We recommend you installing Python and the dependencies of `MIXER` using [Conda](https://docs.conda.io/en/latest/), as one of the dependencies, [graph-tool](https://graph-tool.skewed.de/static/doc/index.html), is only available through this platform:
 
 ```shell
-# Create a conda env named "legend", and install Python 3.9 and the graph-tool package
-conda create --name legend python=3.9 graph-tool -c conda-forge
+# Create a conda env named "mixer", and install Python 3.9 and the graph-tool package
+conda create --name mixer python=3.9 graph-tool -c conda-forge
 # Activate the env
-conda activate legend
+conda activate mixer
 ```
 
-### Install LEGEND
+### Install MIXER
 
 You can download the package from GitHub and install it locally using the following commands in your terminal:
 
 ```shell
 # Ensure you have Python, pip, and git installed on your system.
 # Clone the package from GitHub
-git clone https://github.com/ToryDeng/LEGEND.git
-# Navigate to the LEGEND directory
-cd LEGEND/
+git clone https://github.com/MengqianHuang/MIXER.git
+# Navigate to the MIXER directory
+cd MIXER/
 # Install the package using pip
-pip install dist/LEGEND-0.1.1-py3-none-any.whl  
+pip install dist/MIXER-0.1.1-py3-none-any.whl  
 ```
 
-You can verify that `LEGEND` has been successfully installed by executing:
+You can verify that `MIXER` has been successfully installed by executing:
 
 ```shell
-pip show LEGEND
+pip show MIXER
 ```
 
 And if everything works fine, you will get output like:
 
 ```text
-Name: LEGEND
+Name: MIXER
 Version: 0.1.1
 Summary: An integrative algorithm for identifying co-expressed and cofunctional genes in multimodal transcriptomic sequencing data
-Home-page: https://github.com/ToryDeng/LEGEND
+Home-page: https://github.com/MengqianHuang/MIXER.git
 Author: Tao Deng
 Author-email: taodeng@link.cuhk.edu.cn
 License: GPL v3
-Location: /usr/local/anaconda3/envs/legend/lib/python3.9/site-packages
+Location: /usr/local/anaconda3/envs/mixer/lib/python3.9/site-packages
 Requires: anndata, hdbscan, igraph, leidenalg, loguru, numpy, opencv-python, pandas, scanpy, scikit-learn, scipy, setuptools, SpaGCN, squidpy, torch
 Required-by:
 ```
 
 ## Quick Start
 
-This quick start guide is designed to get you up and running with `LEGEND`. It is recommended to follow this tutorial in a Jupyter Notebook, which provides an interactive environment for executing the Python code necessary for this guide. If you do not have Jupyter installed, follow the installation instructions in the [Project Jupyter Documentation](https://docs.jupyter.org/en/latest/install.html).
+This quick start guide is designed to get you up and running with `MIXER`. It is recommended to follow this tutorial in a Jupyter Notebook, which provides an interactive environment for executing the Python code necessary for this guide. If you do not have Jupyter installed, follow the installation instructions in the [Project Jupyter Documentation](https://docs.jupyter.org/en/latest/install.html).
 
 ### Import Packages
 
-The following code snippet imports `LEGEND` alongside some additional packages that will be used in the tutorial:
+The following code snippet imports `MIXER` alongside some additional packages that will be used in the tutorial:
 
 ```python
-import LEGEND as lg
+import MIXER as mi
 import scanpy as sc
 import squidpy as sq
 import STAGATE_pyG
@@ -91,7 +91,7 @@ import cv2
 from sklearn.metrics import adjusted_rand_score as ari
 ```
 
-In this tutorial, we utilize [STAGATE](https://doi.org/10.1038/s41467-022-29439-6) to denoise gene expressions from the SRT dataset. `STAGATE` is available in two versions: one based on TensorFlow, and another using the [PyG](https://pyg.org/) library. We will be using the PyG version, `STAGATE_pyG`. `STAGATE_pyG` is not included in `LEGEND`'s dependencies, so make sure to install it separately by the instructions in its [documentation](https://stagate.readthedocs.io/en/latest/Installation_pyG.html).
+In this tutorial, we utilize [STAGATE](https://doi.org/10.1038/s41467-022-29439-6) to denoise gene expressions from the SRT dataset. `STAGATE` is available in two versions: one based on TensorFlow, and another using the [PyG](https://pyg.org/) library. We will be using the PyG version, `STAGATE_pyG`. `STAGATE_pyG` is not included in `MIXER`'s dependencies, so make sure to install it separately by the instructions in its [documentation](https://stagate.readthedocs.io/en/latest/Installation_pyG.html).
 
 ### Obtain the Datasets
 
@@ -153,13 +153,13 @@ AnnData object with n_obs × n_vars = 2688 × 18078
     obsp: 'connectivities', 'distances'
 ```
 
-### Run LEGEND
+### Run MIXER
 
-`LEGEND` operates by calculating gene relevance, redundancy, and complementarity within each data modality (scRNA-seq or SRT) before integrating the results across different modalities.
+`MIXER` operates by calculating gene relevance, redundancy, and complementarity within each data modality (scRNA-seq or SRT) before integrating the results across different modalities.
 
 #### Compute on a Single Modailty 
 
-The `lg.GeneClust` function executes gene clustering for each dataset individually. Begin by setting common arguments for the function call:
+The `mi.GeneClust` function executes gene clustering for each dataset individually. Begin by setting common arguments for the function call:
 
 ```python
 args = {
@@ -171,15 +171,15 @@ args = {
 ```
 Let's elaborate on these parameters:
 
-- **version:** `LEGEND` provides two variants for gene clustering: `fast` and `ps`. The `fast` version quickly clusters genes but doesn't assess gene relevance, redundancy, or complementarity. The `ps` version, recommended for multi-modality analysis, performs these comprehensive computations.
+- **version:** `MIXER` provides two variants for gene clustering: `fast` and `ps`. The `fast` version quickly clusters genes but doesn't assess gene relevance, redundancy, or complementarity. The `ps` version, recommended for multi-modality analysis, performs these comprehensive computations.
 - **verbosity:** The verbosity level. `0` displays only warnings and errors. `1` also shows info messages. `2`, also shows debug messages.
 - **relevant_gene_pct:** The percentage of genes to include as relevant. Here we use a relatively small value to reduce the computational time required for this tutorial.
 - **return_info:** Whether intermediate results are returned alongside the selected genes. Set to `True` for a more in-depth review of the clustering process.
 
-Now, apply `lg.GeneClust` to the scRNA-seq dataset:
+Now, apply `mi.GeneClust` to the scRNA-seq dataset:
 
 ```python
-info_rna, sc_genes = lg.GeneClust(
+info_rna, sc_genes = mi.GeneClust(
     adata_rna, n_obs_clusters=23, modality="sc", **args
 )
 ```
@@ -190,10 +190,10 @@ For the scRNA-seq dataset, we specify `n_obs_clusters=23` which is equal to the 
 If `adata.X` contains normalized counts, a warning may appear during processing:
 
 ```text
-2023-12-21 22:56:16.462 | WARNING  | LEGEND._validation:check_raw_counts:71 - Will directly use the possible normalized counts found in `adata.X`.
+2023-12-21 22:56:16.462 | WARNING  | MIXER._validation:check_raw_counts:71 - Will directly use the possible normalized counts found in `adata.X`.
 ```
 
-This indicates that `LEGEND` is working with a potentially normalized expression matrix. `LEGEND` prefers raw counts but can work on normalized counts. In the latter case it will raise this warning to alert the user to verify the data type being used in the analysis.
+This indicates that `MIXER` is working with a potentially normalized expression matrix. `MIXER` prefers raw counts but can work on normalized counts. In the latter case it will raise this warning to alert the user to verify the data type being used in the analysis.
 
 Inspecting the `info_rna` by executing `info_rna` in a Jupyter cell will reveal its structure:
 
@@ -223,7 +223,7 @@ Key intermediate results include:
 
 
 ```python
-info_st, st_genes = lg.GeneClust(
+info_st, st_genes = mi.GeneClust(
     adata_st, img, n_obs_clusters=15, modality="st", alpha=0.7, **args
 )
 ```
@@ -247,15 +247,15 @@ AnnData object with n_obs × n_vars = 1607 × 1808
     varp: 'redundancy'
 ```
 
-By running `LEGEND` in this way, you efficiently process both scRNA-seq and SRT datasets to determine highly relevant and non-redundant genes, paving the way for the multimodal transcriptomic analysis. 
+By running `MIXER` in this way, you efficiently process both scRNA-seq and SRT datasets to determine highly relevant and non-redundant genes, paving the way for the multimodal transcriptomic analysis. 
 
 
 #### Integration
 
-To perform integration using the `lg.integrate` function, pass in the `AnnData` objects (`info_rna` and `info_st`) that contain the intermediate results:
+To perform integration using the `mi.integrate` function, pass in the `AnnData` objects (`info_rna` and `info_st`) that contain the intermediate results:
 
 ```python
-integration_info, integrated_genes = lg.integrate(
+integration_info, integrated_genes = mi.integrate(
     adata_rna=info_rna, adata_st=info_st, return_info=True
 )
 ```
@@ -276,16 +276,16 @@ The output of the integration is summarized in informational logs that detail th
 2023-12-23 23:24:23.829 | INFO  | Selected 346 genes.
 ```
 
-These messages indicate that `LEGEND` has identified `1020` genes in common between the two datasets and has computed their complementarity within each modality. The final selection includes `346` genes that likely have significant roles across the examined modalities.
+These messages indicate that `MIXER` has identified `1020` genes in common between the two datasets and has computed their complementarity within each modality. The final selection includes `346` genes that likely have significant roles across the examined modalities.
 
-> If your downstream analysis, such as domain detection, requires a broader gene set, you may adjust the `relevant_gene_pct` parameter that was set earlier in the `lg.GeneClust` function. Increasing this value allows for a more inclusive gene selection.
+> If your downstream analysis, such as domain detection, requires a broader gene set, you may adjust the `relevant_gene_pct` parameter that was set earlier in the `mi.GeneClust` function. Increasing this value allows for a more inclusive gene selection.
 
 
 ## Applications
 
 ### Co-expressed genes
 
-Genes in the same cluster are likely to be co-expressed and show similar spatial expression patterns. To highlight the co-expression patterns of genes within clusters identified by `LEGEND`, we first denoise the gene expressions in the SRT dataset using `STAGATE`.
+Genes in the same cluster are likely to be co-expressed and show similar spatial expression patterns. To highlight the co-expression patterns of genes within clusters identified by `MIXER`, we first denoise the gene expressions in the SRT dataset using `STAGATE`.
 
 ```python
 # Normalize total expression
@@ -329,19 +329,19 @@ sq.pl.spatial_scatter(adata_st, layer='STAGATE_ReX', color=["Maged1", "Zcchc18"]
 
 <img src="assets/img/co-expression.png" width="100%">
 
-Areas with high expression of one gene correlate with high expression of the other, and similarly for low expression areas. This illustrates the effectiveness of `LEGEND` in identifying biologically relevant gene clusters.
+Areas with high expression of one gene correlate with high expression of the other, and similarly for low expression areas. This illustrates the effectiveness of `MIXER` in identifying biologically relevant gene clusters.
 
 
 ### Spatial Domain Detection
 
-After feature selection with `LEGEND`, we can proceed to downstream analyses such as domain detection. Domain detection is crucial for understanding the spatial organization of gene expression within tissue. To demonstrate the power of `LEGEND` in facilitating domain detection, we compare the performance of the powerful [SpaGCN](https://doi.org/10.1038/s41592-021-01255-8) model on the full gene set versus and the subset of genes identified by `LEGEND`. To apply `SpaGCN`, first ensure it is installed on your system; for installation instructions, visit the [SpaGCN Tutorial](https://github.com/jianhuupenn/SpaGCN/blob/master/tutorial/tutorial.md#1-installation). Once installed, we can use the `run_SpaGCN` function available in `LEGEND` to conduct our analysis with ease:
+After feature selection with `MIXER`, we can proceed to downstream analyses such as domain detection. Domain detection is crucial for understanding the spatial organization of gene expression within tissue. To demonstrate the power of `MIXER` in facilitating domain detection, we compare the performance of the powerful [SpaGCN](https://doi.org/10.1038/s41592-021-01255-8) model on the full gene set versus and the subset of genes identified by `MIXER`. To apply `SpaGCN`, first ensure it is installed on your system; for installation instructions, visit the [SpaGCN Tutorial](https://github.com/jianhuupenn/SpaGCN/blob/master/tutorial/tutorial.md#1-installation). Once installed, we can use the `run_SpaGCN` function available in `MIXER` to conduct our analysis with ease:
 
 ```python
 # Run SpaGCN on the entire dataset
-adata_st.obs['pred_all'] = lg.tl.confidence.run_SpaGCN(adata_st, img, n_spot_cluster=15)
+adata_st.obs['pred_all'] = mi.tl.confidence.run_SpaGCN(adata_st, img, n_spot_cluster=15)
 
-# Run SpaGCN using only the selected genes from LEGEND
-adata_st.obs['pred_selected'] = lg.tl.confidence.run_SpaGCN(adata_st[:, integrated_genes], img, n_spot_cluster=15)
+# Run SpaGCN using only the selected genes from MIXER
+adata_st.obs['pred_selected'] = mi.tl.confidence.run_SpaGCN(adata_st[:, integrated_genes], img, n_spot_cluster=15)
 ```
 
 To analyze the resulting domain predictions, we visualize them as follows:
@@ -350,18 +350,18 @@ To analyze the resulting domain predictions, we visualize them as follows:
 # Visualize the results from both the full gene set and the selected genes
 axes = sq.pl.spatial_scatter(adata_st, color=["cluster", "pred_all", "pred_selected"], figsize=(7, 9), wspace=0, return_ax=True)
 
-# Adjust the first legend for 'cluster'
-axes[0].legend(ncol=3, bbox_to_anchor=(0.5, -0.1), loc='upper center', frameon=False)
+# Adjust the first mixer for 'cluster'
+axes[0].mixer(ncol=3, bbox_to_anchor=(0.5, -0.1), loc='upper center', frameon=False)
 
-# Adjust the second legend for 'pred_all' and add the Adjusted Rand Index (ARI) score to the title
-axes[1].legend(ncol=5, bbox_to_anchor=(0.5, -0.1), loc='upper center', frameon=False)
+# Adjust the second mixer for 'pred_all' and add the Adjusted Rand Index (ARI) score to the title
+axes[1].mixer(ncol=5, bbox_to_anchor=(0.5, -0.1), loc='upper center', frameon=False)
 axes[1].set_title(axes[1].get_title() + f" ARI={np.round(ari(adata_st.obs.cluster, adata_st.obs.pred_all), 2)}")
 
-# Adjust the third legend for 'pred_selected' and add the ARI score to the title
-axes[2].legend(ncol=5, bbox_to_anchor=(0.5, -0.1), loc='upper center', frameon=False)
+# Adjust the third mixer for 'pred_selected' and add the ARI score to the title
+axes[2].mixer(ncol=5, bbox_to_anchor=(0.5, -0.1), loc='upper center', frameon=False)
 axes[2].set_title(axes[2].get_title() + f" ARI={np.round(ari(adata_st.obs.cluster, adata_st.obs.pred_selected), 2)}")
 ```
 
 <img src="assets/img/spatial-clustering.png" width="100%">
 
-The above figure illustrates the spatial clustering results with each domain prediction visualized. The ARI (Adjusted Rand Index) scores indicate the performance of `SpaGCN`, which is observed to improve with the feature selection performed by `LEGEND`, even when hundreds of genes are selected.
+The above figure illustrates the spatial clustering results with each domain prediction visualized. The ARI (Adjusted Rand Index) scores indicate the performance of `SpaGCN`, which is observed to improve with the feature selection performed by `MIXER`, even when hundreds of genes are selected.

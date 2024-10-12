@@ -1,15 +1,10 @@
-# -*- coding: utf-8 -*-
-# @Time : 2022/6/6 17:19
-# @Author : Tory Deng
-# @File : setup.py
-# @Software: PyCharm
 from setuptools import find_packages, setup
 
 with open("README.md", encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
-    name="LEGEND",
+    name="MIXER",
     version="0.1.1",
     description="An integrative algorithm for identifying co-expressed and cofunctional genes in "
     "multimodal transcriptomic sequencing data",
@@ -17,7 +12,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Tao Deng",
     author_email="taodeng@link.cuhk.edu.cn",
-    url="https://github.com/ToryDeng/LEGEND",
+    url="https://github.com/MengqianHuang/MIXER",
     license="GPL v3",
     classifiers=[
         "Programming Language :: Python :: 3",
