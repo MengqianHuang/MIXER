@@ -76,4 +76,12 @@ For more details about how to call the functions, please refer to the [**Tutoria
 
 ## Citation
 
-Coming soon.
+```bibtex
+@inproceedings{deng2024mixer,
+  title={MIXER: Identifying Co-expressed Genes in Multimodal Transcriptomic Sequencing Data},
+  author={Deng, Tao and Huang, Mengqian and Xu, Kaichen and Lu, Yan and Chen, Siyu and Xu, Yucheng and Xie, Nina and Wu, Hao and Sun, Xiaobo},
+  booktitle={Proceedings of the 15th ACM International Conference on Bioinformatics, Computational Biology and Health Informatics},
+  pages={1--1},
+  year={2024}
+}
+```
